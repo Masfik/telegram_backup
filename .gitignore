@@ -1,6 +1,9 @@
 # Directory that holds backup files
 backup-files/
-
+# All .jpg thumbnails
+*.jpg
+# All the configuration files
+*.config
 # Ignoring files that start with the checksum_* name.
 # Useful for checking if the file has been altered and is worth backing up.
 checksum_*
