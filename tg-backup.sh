@@ -48,6 +48,8 @@ done
 # SENDING ALL ZIP FILES INSIDE THE ./backup-files DIRECTORY TO TELEGRAM
 #-------------------------------------------------------------------------------
 
+echo "Uploading files..."
+
 for file in "$current_dir"/backup-files/*.zip; do
   # Only continue the loop if there are files inside the directory
   test -f "$file" || continue
@@ -61,11 +63,16 @@ for file in "$current_dir"/backup-files/*.zip; do
   thumbnail="$current_dir/thumbnails/$file_name.jpg"
 
   # Sending the file to the Telegram chat
-  curl "$telegram/sendDocument" \
+  if curl "$telegram/sendDocument" \
     -F chat_id="$CHAT_ID" \
     -F document=@"$file" \
     -F caption="#$file_name: $(date +%d/%m/%Y)" \
     -F thumb=@"$thumbnail" \
     -F disable_notification=$disable_notification \
-    -H "Content-Type: multipart/form-data"
+    -H "Content-Type: multipart/form-data"; then
+    echo "Uploaded $file successfully."
+    rm "$file"
+  fi
 done
+
+echo "Done."
