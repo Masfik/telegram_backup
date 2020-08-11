@@ -1,3 +1,6 @@
 # Ignoring files that start with the checksum_* name.
 # Useful for checking if the file has been altered and is worth backing up.
 checksum_*
+
+# IntelliJ
+.idea/
