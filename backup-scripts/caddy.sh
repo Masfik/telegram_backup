@@ -3,14 +3,19 @@
 current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 # Directory of the backup files
 backup_dir=$1
-# Name of the checksum file
-checksum_file="$current_dir/checksum_caddy"
+# Path of the checksum file
+checksum_file="$current_dir/caddy/checksum_caddy"
 
 #-------------------------------------------------------------------------------
 # CONFIGURATION FILE
 #-------------------------------------------------------------------------------
 
-config="$current_dir/caddy.config"
+# Creating the ./caddy directory if non-existent
+if [ ! -d "$current_dir"/caddy ]; then
+  mkdir -p "$current_dir"/caddy
+fi
+
+config="$current_dir/caddy/caddy.config"
 
 # Generating config file if non-existent
 if [[ ! -f "$config" ]]; then
@@ -18,11 +23,13 @@ if [[ ! -f "$config" ]]; then
   touch "$config"
   # Appending default config to caddy.config
   {
-    echo "caddyfile_dir=\"/etc/Caddy/Caddyfile\""
-    echo "zip_file_name=\"Caddy.zip\""
+    echo "#!/bin/bash"
+    echo "export caddyfile_dir=\"/etc/Caddy/Caddyfile\""
+    echo "export zip_file_name=\"Caddy.zip\""
   } >>"$config"
 fi
 
+# Declaring variables to be sourced later ↓
 declare caddyfile_dir
 declare zip_file_name
 

@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #-------------------------------------------------------------------------------
 # IMPORTANT! BEFORE STARTING THIS SCRIPT:
 # 1) Define environment variables for $BOT_TOKEN and $CHAT_ID
@@ -69,7 +68,8 @@ for file in "$current_dir"/backup-files/*.zip; do
     -F caption="#$file_name: $(date +%d/%m/%Y)" \
     -F thumb=@"$thumbnail" \
     -F disable_notification=$disable_notification \
-    -H "Content-Type: multipart/form-data"; then
+    -H "Content-Type: multipart/form-data";
+  then
     echo "Uploaded $file successfully."
     rm "$file"
   fi
