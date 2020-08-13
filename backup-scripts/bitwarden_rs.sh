@@ -24,11 +24,13 @@ if [[ ! -f "$config_file" ]]; then
   {
     echo "#!/bin/bash"
     echo "export bitwarden_dir=\"/root/bw-data\""
+    echp "export service_file=\"/etc/systemd/system/bitwarden.service\""
     echo "export zip_file_name=\"Bitwarden.zip\""
   } >>"$config_file"
 fi
 
 declare bitwarden_dir
+declare service_file
 declare zip_file_name
 
 # shellcheck source=bitwarden/bitwarden.config
@@ -44,4 +46,7 @@ db_backup_path="$config_dir/db.sqlite3"
 sqlite3 "$bitwarden_dir/db.sqlite3" ".backup '$db_backup_path'"
 
 # Zipping the database
-zip "$backup_dir/$zip_file_name" "$db_backup_path"
+zip -r "$backup_dir/$zip_file_name" \
+  "$db_backup_path" \
+  "$bitwarden_dir/attachments" \
+  "$service_file"

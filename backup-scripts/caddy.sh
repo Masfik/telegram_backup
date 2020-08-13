@@ -41,7 +41,7 @@ source "$config_file"
 #-------------------------------------------------------------------------------
 
 # Path of the checksum file
-checksum_file="$current_dir/caddy/checksum_caddy"
+checksum_file="$config_dir/checksum_caddy"
 
 # Creating the checksum file if non-existent
 touch "$checksum_file"
