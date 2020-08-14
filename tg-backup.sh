@@ -63,7 +63,7 @@ for file in "$current_dir"/backup-files/*.zip; do
 
   # Sending the file to the Telegram chat
   if
-    curl -f "$telegram/sendDocument" \
+    curl "$telegram/sendDocument" -sS -f --output /dev/null \
       -F chat_id="$CHAT_ID" \
       -F document=@"$file" \
       -F caption="#$file_name: $(date +%d/%m/%Y)" \
@@ -71,11 +71,18 @@ for file in "$current_dir"/backup-files/*.zip; do
       -F disable_notification=$disable_notification \
       -H "Content-Type: multipart/form-data"
   then
-    echo "[Backup] Uploaded $file successfully."
-    rm "$file"
+    echo "[Backup] Uploaded $file_name.zip successfully."
+    rm "$file" # ← Removing the zip file
   else
     echo "[Backup] Failed to upload $file"
   fi
 done
 
-echo "[Backup] Done."
+# Send a separation sticker (<hr>)
+curl "$telegram/sendSticker" -sS \
+  -F chat_id="$CHAT_ID" \
+  -F sticker="CAACAgQAAxkBAAOiXzaxbu7yfw5_eX_lmfCV5XpeIOAAAs4FAALWbsAGNaMYJvmpBkMaBA" \
+  -F disable_notification=$disable_notification
+
+# Printing a message between two NEWLINEs
+printf "\n%s\n" "[Backup] Done."
