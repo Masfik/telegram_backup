@@ -11,7 +11,7 @@
 # Disable Telegram notification
 disable_notification=true
 # Telegram endpoint
-telegram="https://api.telegram.org/bot$BOT_TOKEN"
+declare -r telegram="https://api.telegram.org/bot$BOT_TOKEN"
 # Current directory of the script
 current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
@@ -74,15 +74,19 @@ for file in "$current_dir"/backup-files/*.zip; do
     echo "[Backup] Uploaded $file_name.zip successfully."
     rm "$file" # ← Removing the zip file
   else
-    echo "[Backup] Failed to upload $file"
+    # Error message in red
+    echo -e "\033[31m[Backup] ERROR: Failed to upload $file"
   fi
 done
+
+# Sticker's file ID (this is a horizontal line sticker)
+hr="CAACAgQAAxkBAAOiXzaxbu7yfw5_eX_lmfCV5XpeIOAAAs4FAALWbsAGNaMYJvmpBkMaBA"
 
 # Send a separation sticker (<hr>)
 curl "$telegram/sendSticker" -sS \
   -F chat_id="$CHAT_ID" \
-  -F sticker="CAACAgQAAxkBAAOiXzaxbu7yfw5_eX_lmfCV5XpeIOAAAs4FAALWbsAGNaMYJvmpBkMaBA" \
+  -F sticker="$hr" \
   -F disable_notification=$disable_notification
 
 # Printing a message between two NEWLINEs
-printf "\n%s\n" "[Backup] Done."
+printf "\n%s\n" "[Backup] Done. It took $SECONDS seconds to backup everything."
