@@ -39,8 +39,10 @@ fi
 #-------------------------------------------------------------------------------
 
 for backupScript in "$current_dir"/backup-scripts/*.sh; do
-  # Passing the backup directory to all scripts
-  bash "$backupScript" "$current_dir/backup-files" -H || break
+  # Passing the backup-files directory and utils to all scripts
+  bash "$backupScript" \
+    "$current_dir/backup-files" \
+    "$current_dir/utils" -H || break
 done
 
 #-------------------------------------------------------------------------------
