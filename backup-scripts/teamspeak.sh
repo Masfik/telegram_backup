@@ -10,24 +10,16 @@ declare -r config_dir="$current_dir/teamspeak"
 # CONFIGURATION FILE
 #-------------------------------------------------------------------------------
 
-# Creating the ./teamspeak directory if non-existent
-if [ ! -d "$config_dir" ]; then
-  mkdir -p "$config_dir"
-fi
+# shellcheck source=utils/generate_config.sh
+source "$2/generate_config.sh" --source-only
 
 declare -r config_file="$config_dir/teamspeak.config"
 
-if [[ ! -f "$config_file" ]]; then
-  # Creating the teamspeak.config file
-  touch "$config_file"
-  # Appending default config to teamspeak.config
-  {
-    echo "#!/bin/bash"
-    echo "export teamspeak_dir=\"/opt/teamspeak-server\""
-    echo "export service_file=\"/etc/systemd/system/teamspeak.service\""
-    echo "export zip_file_name=\"TeamSpeak.zip\""
-  } >>"$config_file"
-fi
+# Generating default config folder and file if non-existent
+generate_config -f "$config_file" \
+  -i teamspeak_dir="/opt/teamspeak-server" \
+  -i service_file="/etc/systemd/system/teamspeak.service" \
+  -i zip_file_name="TeamSpeak.zip"
 
 declare teamspeak_dir
 declare service_file

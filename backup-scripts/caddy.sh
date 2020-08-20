@@ -10,24 +10,15 @@ declare -r config_dir="$current_dir/caddy"
 # CONFIGURATION FILE
 #-------------------------------------------------------------------------------
 
-# Creating the ./caddy directory if non-existent
-if [ ! -d "$config_dir" ]; then
-  mkdir -p "$config_dir"
-fi
+# shellcheck source=utils/generate_config.sh
+source "$2/generate_config.sh" --source-only
 
 declare -r config_file="$config_dir/caddy.config"
 
-# Generating config file if non-existent
-if [[ ! -f "$config_file" ]]; then
-  # Creating the caddy.config file
-  touch "$config_file"
-  # Appending default config to caddy.config
-  {
-    echo "#!/bin/bash"
-    echo "export caddyfile_dir=\"/etc/caddy/Caddyfile\""
-    echo "export zip_file_name=\"Caddy.zip\""
-  } >>"$config_file"
-fi
+# Generating default config folder and file if non-existent
+generate_config -f "$config_file" \
+  -i caddyfile_dir="/etc/caddy/Caddyfile" \
+  -i zip_file_name="Caddy.zip"
 
 # Declaring variables to be sourced later ↓
 declare caddyfile_dir
