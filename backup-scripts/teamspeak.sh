@@ -1,8 +1,8 @@
 #!/bin/bash
 # Current directory of the script
-current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+current_dir=$1
 # Directory of the backup files
-declare -r backup_dir=$1
+declare -r backup_dir=$2
 # Directory of the config files
 declare -r config_dir="$current_dir/teamspeak"
 
@@ -11,7 +11,7 @@ declare -r config_dir="$current_dir/teamspeak"
 #-------------------------------------------------------------------------------
 
 # shellcheck source=utils/generate_config.sh
-source "$2/generate_config.sh" --source-only
+source "$3/generate_config.sh" --source-only
 
 declare -r config_file="$config_dir/teamspeak.config"
 
