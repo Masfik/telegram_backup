@@ -32,12 +32,15 @@ source "$config_file"
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
 
+# Directory of the temporary files
+declare -r tmp_dir=$4
+
 # Path of the backed up database
-declare -r db_backup_path="$config_dir/db.sqlite3"
+declare -r db_backup_path="$tmp_dir/db.sqlite3"
 # Safely backing up the database via the special .backup function
 sqlite3 "$bitwarden_dir/db.sqlite3" ".backup '$db_backup_path'"
 
-# Zipping the database
+# Zipping the database, attachments and service file
 zip -r "$backup_dir/$zip_file_name" \
   "$db_backup_path" \
   "$bitwarden_dir/attachments" \

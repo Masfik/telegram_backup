@@ -1,6 +1,6 @@
 #!/bin/bash
 # Current directory of the script
-current_dir=$1
+declare -r current_dir=$1
 # Directory of the backup files
 declare -r backup_dir=$2
 # Directory of the config files

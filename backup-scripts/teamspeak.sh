@@ -1,6 +1,6 @@
 #!/bin/bash
 # Current directory of the script
-current_dir=$1
+declare -r current_dir=$1
 # Directory of the backup files
 declare -r backup_dir=$2
 # Directory of the config files
@@ -32,13 +32,19 @@ source "$config_file"
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
 
+# Directory of the temporary files
+declare -r tmp_dir=$4
+
 # Path of the backed up database
-declare -r db_backup_path="$config_dir/ts3server.sqlitedb"
+declare -r db_backup_path="$tmp_dir/ts3server.sqlitedb"
 # Safely backing up the database via the special .backup function
 sqlite3 "$teamspeak_dir/ts3server.sqlitedb" ".backup '$db_backup_path'"
 
-# Zipping the database and icons
+# Zipping database, icons, license, ts3server.ini, query whitelist and service
 zip -r "$backup_dir/$zip_file_name" \
   "$db_backup_path" \
   "$teamspeak_dir/files" \
+  "$teamspeak_dir/license" \
+  "$teamspeak_dir/ts3server.ini" \
+  "$teamspeak_dir/query_ip_whitelist.txt" \
   "$service_file"

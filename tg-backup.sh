@@ -30,6 +30,9 @@ if [ ! -d "$current_dir"/thumbnails ]; then
   mkdir -p "$current_dir"/thumbnails
 fi
 
+# Creating tg-backup directory inside the /tmp folder
+mkdir -p /tmp/tg-backup
+
 #-------------------------------------------------------------------------------
 # RUNNING ALL BACKUP SCRIPTS INSIDE THE ./backup-scripts DIRECTORY
 # 1) All scripts must end with the .sh extension
@@ -39,11 +42,12 @@ fi
 #-------------------------------------------------------------------------------
 
 for script in "$current_dir"/backup-scripts/*.sh; do
-  # Passing the backup-files directory and utils to all scripts
+  # Passing the backup-files directory, utils and temp folder to all scripts
   bash "$script" \
     "$current_dir/backup-scripts" \
     "$current_dir/backup-files" \
-    "$current_dir/utils" -H || break
+    "$current_dir/utils" \
+    "/tmp/tg-backup" -H || break
 done
 
 #-------------------------------------------------------------------------------
@@ -91,5 +95,8 @@ curl "$telegram/sendSticker" -sS \
   -F sticker="$hr" \
   -F disable_notification=$disable_notification
 
+# Removing temporary files related to tg-backup
+rm -rf /tmp/tg-backup/
+
 # Printing a message between two NEWLINEs
-printf "\n%s\n" "[Backup] Done. It took $SECONDS seconds to backup everything."
+printf "\n%s\n" "[Backup] Done. It took $SECONDS seconds to execute the script."
