@@ -1,5 +1,5 @@
 #!/bin/bash
-# Create an encrypted zip archive with GnuGP.
+# Create an encrypted zip archive with GnuPG.
 # The first argument must be the name of the zip file, followed by the other
 # arguments related entirely to the `zip` command.
 # The last few arguments must be related to gpg recipients.

@@ -1,4 +1,10 @@
 #!/bin/bash
+# Generate config directory and file if non-existent.
+#
+# Example usage:
+# generate_config -f /path/to/caddy/caddy.config \
+#   -i caddy_dir="/etc/caddy/Caddyfile"
+#   -i zip_file_name="Caddy.zip"
 function generate_config() {
   # Defining local variables (the "g" prefix is required to avoid conflicts)
   local g_arg g_config_file g_config_items=()
