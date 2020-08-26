@@ -15,6 +15,7 @@ function encrypt_file() {
 
   local file_path=$1
   local file_name="${file_path%%.*}" # ← Removing extension
+  # Removing the first two arguments
   shift 2
 
   echo "$file_name"
@@ -69,11 +70,9 @@ function encrypted_zip() {
   # shellcheck disable=SC2086
   zip ${params[0]}
 
-  # Creating a "recipients" array using the space as the delimiter
-  IFS=" " read -r -a recipients <<<"${params[1]}"
-
   # Encrypting ZIP archive
-  encrypt_file "$file_name" --gpg-recipients "${recipients[@]}"
+  # shellcheck disable=SC2086
+  encrypt_file "$file_name" --gpg-recipients ${params[1]}
 
   # Removing zip and only keeping the encrypted file
   rm "$file_name"
