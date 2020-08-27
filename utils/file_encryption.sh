@@ -1,7 +1,7 @@
 #!/bin/bash
 # Create an encrypted file with GnuPG.
-# The first parameter is the file path.
-# The third parameter must be --gpg-recipients, followed by a list of valid
+# The first argument is the file path.
+# The second argument must be --gpg-recipients, followed by a list of valid
 # E-Mail addresses saved.
 # 
 # The output file will replace the extension with .gpg
