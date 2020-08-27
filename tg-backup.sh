@@ -2,9 +2,9 @@
 #-------------------------------------------------------------------------------
 # IMPORTANT! BEFORE STARTING THIS SCRIPT:
 # 1) Define environment variables for $BOT_TOKEN and $CHAT_ID
-# 2) Make sure that the thumbnails match the name of the zip files that will be
+# 2) Make sure that the thumbnails match the name of the gpg files that will be
 #    put into the ./backup-files directory.
-#    E.g. ./backup-files/Caddy.zip will need ./thumbnails/Caddy.jpg to function
+#    E.g. ./backup-files/Caddy.gpg will need ./thumbnails/Caddy.jpg to function
 # 3) ...
 #-------------------------------------------------------------------------------
 
@@ -34,9 +34,21 @@ fi
 mkdir -p /tmp/tg-backup
 
 #-------------------------------------------------------------------------------
+# CONFIGURATION FILE
+#-------------------------------------------------------------------------------
+
+# shellcheck source=utils/generate_config.sh
+source "$current_dir/utils/generate_config.sh" --source-only
+
+declare -r config_file="$current_dir/tg-backup.config"
+
+generate_config -f "$config_file" \
+  -a gpg_recipients="()"
+
+#-------------------------------------------------------------------------------
 # RUNNING ALL BACKUP SCRIPTS INSIDE THE ./backup-scripts DIRECTORY
 # 1) All scripts must end with the .sh extension
-# 2) All backed up files must be .zip archives and placed inside the
+# 2) All backed up files must be encrypted .gpg files and placed inside the
 #    ./backup-files directory
 # 3) ...
 #-------------------------------------------------------------------------------
@@ -51,17 +63,17 @@ for script in "$current_dir"/backup-scripts/*.sh; do
 done
 
 #-------------------------------------------------------------------------------
-# SENDING ALL ZIP FILES INSIDE THE ./backup-files DIRECTORY TO TELEGRAM
+# SENDING ALL GPG FILES INSIDE THE ./backup-files DIRECTORY TO TELEGRAM
 #-------------------------------------------------------------------------------
 
 echo "[Backup] Uploading files..."
 
-for file in "$current_dir"/backup-files/*.zip; do
+for file in "$current_dir"/backup-files/*.gpg; do
   # Only continue the loop if there are files inside the directory
   test -f "$file" || continue
 
-  # Removing the .zip extension from the file name
-  file_name=${file%.zip}
+  # Removing the .gpg extension from the file name
+  file_name=${file%.gpg}
   # Removing the full path from the file name
   file_name=${file_name##*/}
 
@@ -78,8 +90,8 @@ for file in "$current_dir"/backup-files/*.zip; do
       -F disable_notification=$disable_notification \
       -H "Content-Type: multipart/form-data"
   then
-    echo "[Backup] Uploaded $file_name.zip successfully."
-    rm "$file" # ← Removing the zip file
+    echo "[Backup] Uploaded $file_name.gpg successfully."
+    rm "$file" # ← Removing the gpg file
   else
     # Error message in red
     echo -e "\033[31m[Backup] ERROR: Failed to upload $file"

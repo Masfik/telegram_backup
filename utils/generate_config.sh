@@ -14,7 +14,7 @@ function generate_config() {
   # -f for "config File"
   # -s for "String" item
   # -a for "Array" item
-  while getopts ":f:s:a" g_arg; do
+  while getopts ":f:s:a:" g_arg; do
     case ${g_arg} in
     f) g_config_file=${OPTARG} ;;
     s) g_config_items["${OPTARG}"]="string" ;;
