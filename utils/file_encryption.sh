@@ -1,12 +1,15 @@
 #!/bin/bash
 # Create an encrypted file with GnuPG.
-# The first parameter is the file name.
-# The second parameter must be --gpg-recipients, followed by a list of valid
+# The first parameter is the file path.
+# The third parameter must be --gpg-recipients, followed by a list of valid
 # E-Mail addresses saved.
+# 
+# The output file will replace the extension with .gpg
+# (e.g. file.txt becomes file.gpg).
 #
 # Usage example:
 # encrypt_file file.txt --gpg-recipients email1@domain.tld email2@domain.tld
-function encrypt_file() {
+function encrypted_file() {
   if [[ "$2" != "--gpg-recipients" ]]; then
     echo "The second argument is not --gpg-recipients."
     echo "Example: encrypt_file file.txt --gpg-recipients email@domain.tld"
@@ -17,8 +20,6 @@ function encrypt_file() {
   local file_name="${file_path%%.*}" # ← Removing extension
   # Removing the first two arguments
   shift 2
-
-  echo "$file_name"
 
   recipients_param=""
   for recipient in "$@"; do
@@ -72,7 +73,7 @@ function encrypted_zip() {
 
   # Encrypting ZIP archive
   # shellcheck disable=SC2086
-  encrypt_file "$file_name" --gpg-recipients ${params[1]}
+  encrypted_file "$file_name" --gpg-recipients ${params[1]}
 
   # Removing zip and only keeping the encrypted file
   rm "$file_name"
