@@ -16,7 +16,7 @@ source "$3/generate_config.sh" --source-only
 declare -r config_file="$config_dir/iptables.config"
 
 # Generating default config folder and file if non-existent
-generate_config -f "$config_file" -i zip_file_name="iptables.zip"
+generate_config -f "$config_file" -s zip_file_name="iptables.zip"
 
 declare zip_file_name
 

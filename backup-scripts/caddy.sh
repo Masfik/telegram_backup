@@ -17,8 +17,8 @@ declare -r config_file="$config_dir/caddy.config"
 
 # Generating default config folder and file if non-existent
 generate_config -f "$config_file" \
-  -i caddyfile_dir="/etc/caddy/Caddyfile" \
-  -i zip_file_name="Caddy.zip"
+  -s caddyfile_dir="/etc/caddy/Caddyfile" \
+  -s zip_file_name="Caddy.zip"
 
 # Declaring variables to be sourced later ↓
 declare caddyfile_dir

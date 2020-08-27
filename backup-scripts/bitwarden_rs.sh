@@ -17,9 +17,9 @@ declare -r config_file="$config_dir/bitwarden.config"
 
 # Generating default config folder and file if non-existent
 generate_config -f "$config_file" \
-  -i bitwarden_dir="/root/bw-data" \
-  -i service_file="/etc/systemd/system/bitwarden.service" \
-  -i zip_file_name="Bitwarden.zip"
+  -s bitwarden_dir="/root/bw-data" \
+  -s service_file="/etc/systemd/system/bitwarden.service" \
+  -s zip_file_name="Bitwarden.zip"
 
 declare bitwarden_dir
 declare service_file

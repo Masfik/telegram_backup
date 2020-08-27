@@ -17,9 +17,9 @@ declare -r config_file="$config_dir/teamspeak.config"
 
 # Generating default config folder and file if non-existent
 generate_config -f "$config_file" \
-  -i teamspeak_dir="/opt/teamspeak-server" \
-  -i service_file="/etc/systemd/system/teamspeak.service" \
-  -i zip_file_name="TeamSpeak.zip"
+  -s teamspeak_dir="/opt/teamspeak-server" \
+  -s service_file="/etc/systemd/system/teamspeak.service" \
+  -s zip_file_name="TeamSpeak.zip"
 
 declare teamspeak_dir
 declare service_file
