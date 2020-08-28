@@ -19,11 +19,11 @@ declare -r config_file="$config_dir/bitwarden.config"
 generate_config -f "$config_file" \
   -s bitwarden_dir="/root/bw-data" \
   -s service_file="/etc/systemd/system/bitwarden.service" \
-  -s zip_file_name="Bitwarden.zip"
+  -s file_name="Bitwarden"
 
 declare bitwarden_dir
 declare service_file
-declare zip_file_name
+declare file_name
 
 # shellcheck source=bitwarden/bitwarden.config
 source "$config_file"
@@ -31,6 +31,9 @@ source "$config_file"
 #-------------------------------------------------------------------------------
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
+
+# shellcheck source=utils/file_encryption.sh
+source "$3/file_encryption.sh" --source-only
 
 # Directory of the temporary files
 declare -r tmp_dir=$4
@@ -40,8 +43,13 @@ declare -r db_backup_path="$tmp_dir/db.sqlite3"
 # Safely backing up the database via the special .backup function
 sqlite3 "$bitwarden_dir/db.sqlite3" ".backup '$db_backup_path'"
 
+# shellcheck source=../tg-backup.config
+source "$5" --source only; declare -a gpg_recipients
+
 # Zipping the database, attachments and service file
-zip -r "$backup_dir/$zip_file_name" \
+encrypted_zip "$backup_dir/$file_name.zip" -r \
   "$db_backup_path" \
   "$bitwarden_dir/attachments" \
-  "$service_file"
+  "$service_file" \
+  \
+  --gpg-recipients "${gpg_recipients[@]}"

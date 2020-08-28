@@ -18,11 +18,13 @@ declare -r config_file="$config_dir/caddy.config"
 # Generating default config folder and file if non-existent
 generate_config -f "$config_file" \
   -s caddyfile_dir="/etc/caddy/Caddyfile" \
-  -s zip_file_name="Caddy.zip"
+  -s service_file="/etc/systemd/system/caddy.service" \
+  -s file_name="Caddy"
 
 # Declaring variables to be sourced later ↓
 declare caddyfile_dir
-declare zip_file_name
+declare service_file
+declare file_name
 
 # shellcheck source=caddy/caddy.config
 source "$config_file"
@@ -30,6 +32,9 @@ source "$config_file"
 #-------------------------------------------------------------------------------
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
+
+# shellcheck source=utils/file_encryption.sh
+source "$3/file_encryption.sh" --source-only
 
 # Path of the checksum file
 declare -r checksum_file="$config_dir/checksum_caddy"
@@ -46,6 +51,14 @@ if [[ "$previous_checksum" == "$new_checksum" ]]; then
 else
   # Saving the new checksum to the file
   echo "$new_checksum" >"$checksum_file"
+
+  # shellcheck source=../tg-backup.config
+  source "$5" --source only; declare -a gpg_recipients
+
   # Zipping the Caddyfile config
-  zip "$backup_dir/$zip_file_name" "$caddyfile_dir"
+  encrypted_zip "$backup_dir/$file_name.zip" \
+    "$caddyfile_dir" \
+    "$service_file" \
+    \
+    --gpg-recipients "${gpg_recipients[@]}"
 fi

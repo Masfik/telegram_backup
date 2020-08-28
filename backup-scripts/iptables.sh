@@ -16,9 +16,9 @@ source "$3/generate_config.sh" --source-only
 declare -r config_file="$config_dir/iptables.config"
 
 # Generating default config folder and file if non-existent
-generate_config -f "$config_file" -s zip_file_name="iptables.zip"
+generate_config -f "$config_file" -s file_name="iptables"
 
-declare zip_file_name
+declare file_name
 
 # shellcheck source=iptables/iptables.config
 source "$config_file"
@@ -26,6 +26,9 @@ source "$config_file"
 #-------------------------------------------------------------------------------
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
+
+# shellcheck source=utils/file_encryption.sh
+source "$3/file_encryption.sh" --source-only
 
 # Directory of the temporary files
 declare -r tmp_dir=$4
@@ -52,6 +55,10 @@ else
   # Saving the new checksum to the file
   echo "$new_checksum" >"$checksum_file"
 
+  # shellcheck source=../tg-backup.config
+  source "$5" --source only; declare -a gpg_recipients
+
   # Zipping rules
-  zip "$backup_dir/$zip_file_name" "$rules_file"
+  encrypted_zip "$backup_dir/$file_name.zip" "$rules_file" \
+    --gpg-recipients "${gpg_recipients[@]}"
 fi

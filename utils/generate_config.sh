@@ -4,7 +4,7 @@
 # Example usage:
 # generate_config -f /path/to/caddy/caddy.config \
 #   -s caddy_dir="/etc/caddy/Caddyfile"
-#   -s zip_file_name="Caddy.zip"
+#   -s file_name="Caddy.zip"
 function generate_config() {
   # Defining local variables (the "g" prefix is required to avoid conflicts)
   local g_arg g_config_file
@@ -36,7 +36,7 @@ function generate_config() {
     touch "$g_config_file"
     {
       echo "#!/bin/bash"
-      echo -n "# IMPORTANT: only change the value between the"
+      echo -n "# IMPORTANT: only change the value between the "
       echo "\"quotation marks\" or \"()\"."
     } >"$g_config_file"
 
