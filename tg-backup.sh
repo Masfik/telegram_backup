@@ -40,10 +40,8 @@ mkdir -p /tmp/tg-backup
 # shellcheck source=utils/generate_config.sh
 source "$current_dir/utils/generate_config.sh" --source-only
 
-declare -r config_file="$current_dir/tg-backup.config"
-
-generate_config -f "$config_file" \
-  -a gpg_recipients="()"
+# Generating default config file if non-existent
+generate_config -f "$current_dir/tg-backup.config" -a gpg_recipients="()"
 
 #-------------------------------------------------------------------------------
 # RUNNING ALL BACKUP SCRIPTS INSIDE THE ./backup-scripts DIRECTORY
@@ -54,12 +52,14 @@ generate_config -f "$config_file" \
 #-------------------------------------------------------------------------------
 
 for script in "$current_dir"/backup-scripts/*.sh; do
-  # Passing the backup-files directory, utils and temp folder to all scripts
+  # Passing the backup-files dir, utils, tmp dir and config to all scripts
   bash "$script" \
     "$current_dir/backup-scripts" \
     "$current_dir/backup-files" \
     "$current_dir/utils" \
-    "/tmp/tg-backup" -H || break
+    "/tmp/tg-backup" \
+    "$current_dir/tg-backup.config" \
+    -H || break
 done
 
 #-------------------------------------------------------------------------------
