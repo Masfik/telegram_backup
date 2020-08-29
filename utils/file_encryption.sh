@@ -28,7 +28,9 @@ function encrypted_file() {
 
   # Encrypting file
   # shellcheck disable=SC2086
-  gpg --output "$file_name.gpg" --encrypt --sign $recipients_param "$file_path"
+  gpg --output "$file_name.gpg" --encrypt \
+    --batch --trust-model always \
+    $recipients_param "$file_path"
 }
 
 # Create an encrypted zip archive with GnuPG.

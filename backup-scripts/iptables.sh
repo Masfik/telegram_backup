@@ -59,6 +59,6 @@ else
   source "$5" --source only; declare -a gpg_recipients
 
   # Zipping rules
-  encrypted_zip "$backup_dir/$file_name.zip" "$rules_file" \
+  encrypted_zip "$backup_dir/$file_name.zip" -j "$rules_file" \
     --gpg-recipients "${gpg_recipients[@]}"
 fi
