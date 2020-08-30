@@ -1,19 +1,22 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
 # IMPORTANT! BEFORE STARTING THIS SCRIPT:
-# 1) Define environment variables for $BOT_TOKEN and $CHAT_ID
+# 1) Define variables for $BOT_TOKEN and $CHAT_ID from the generated
 # 2) Make sure that the thumbnails match the name of the gpg files that will be
 #    put into the ./backup-files directory.
 #    E.g. ./backup-files/Caddy.gpg will need ./thumbnails/Caddy.jpg to function
 # 3) ...
 #-------------------------------------------------------------------------------
 
-# Disable Telegram notification
-disable_notification=true
-# Telegram endpoint
-declare -r telegram="https://api.telegram.org/bot$BOT_TOKEN"
 # Current directory of the script
 current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+source "$current_dir/tg-backup.config" --source-only
+
+# Telegram endpoint
+declare -r telegram="https://api.telegram.org/bot$BOT_TOKEN"
+# Disable Telegram notification
+disable_notification=true
 
 # Creating the ./backup-scripts directory if non-existent
 if [ ! -d "$current_dir"/backup-scripts ]; then
@@ -41,7 +44,10 @@ mkdir -p /tmp/tg-backup
 source "$current_dir/utils/generate_config.sh" --source-only
 
 # Generating default config file if non-existent
-generate_config -f "$current_dir/tg-backup.config" -a gpg_recipients="()"
+generate_config -f "$current_dir/tg-backup.config" \
+  -s BOT_TOKEN="" \
+  -s CHAT_ID="" \
+  -a gpg_recipients="()"
 
 #-------------------------------------------------------------------------------
 # RUNNING ALL BACKUP SCRIPTS INSIDE THE ./backup-scripts DIRECTORY
