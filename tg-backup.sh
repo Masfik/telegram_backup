@@ -1,16 +1,18 @@
 #!/bin/bash
 #-------------------------------------------------------------------------------
-# IMPORTANT! BEFORE STARTING THIS SCRIPT:
-# 1) Define variables for $BOT_TOKEN and $CHAT_ID from the generated
-# 2) Make sure that the thumbnails match the name of the gpg files that will be
+# IMPORTANT! TO SET UP THIS SCRIPT:
+# 1) Run the script for the first time, so configuration files will be generated
+# 2) Give a value to $BOT_TOKEN and $CHAT_ID from the generated tg-backup.config
+# 3) Make sure that the thumbnails match the name of the gpg files that will be
 #    put into the ./backup-files directory.
-#    E.g. ./backup-files/Caddy.gpg will need ./thumbnails/Caddy.jpg to function
-# 3) ...
+#    E.g. ./backup-files/Caddy.gpg will need ./thumbnails/Caddy.jpg to function.
+#    Only JPG thumbnails are accepted
 #-------------------------------------------------------------------------------
 
 # Current directory of the script
 current_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
+# shellcheck source=tg-backup.config
 source "$current_dir/tg-backup.config" --source-only
 
 # Telegram endpoint
@@ -54,7 +56,6 @@ generate_config -f "$current_dir/tg-backup.config" \
 # 1) All scripts must end with the .sh extension
 # 2) All backed up files must be encrypted .gpg files and placed inside the
 #    ./backup-files directory
-# 3) ...
 #-------------------------------------------------------------------------------
 
 for script in "$current_dir"/backup-scripts/*.sh; do

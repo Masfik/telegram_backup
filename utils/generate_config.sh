@@ -1,5 +1,8 @@
 #!/bin/bash
 # Generate config directory and file if non-existent.
+# -f for "config File"
+# -s for "String" item
+# -a for "Array" item
 #
 # Example usage:
 # generate_config -f /path/to/caddy/caddy.config \
@@ -11,9 +14,6 @@ function generate_config() {
   local -A g_config_items
 
   # Function named arguments
-  # -f for "config File"
-  # -s for "String" item
-  # -a for "Array" item
   while getopts ":f:s:a:" g_arg; do
     case ${g_arg} in
     f) g_config_file=${OPTARG} ;;
@@ -42,13 +42,14 @@ function generate_config() {
 
     # Adding each config item specified with the -s or -a argument
     for item in "${!g_config_items[@]}"; do
-      if [[ "${g_config_items[$item]}" == "string" ]]; then
+      case "${g_config_items[$item]}" in
+      "string")
         # Appending item to file and wrapping value around quotation marks
         echo "export $item" | sed 's/=/=\"/; s/$/\"/' \
           >>"$g_config_file"
-      elif [[ "${g_config_items[$item]}" == "array" ]]; then
-        echo "export $item" >>"$g_config_file"
-      fi
+        ;;
+      "array") echo "export $item" >>"$g_config_file" ;;
+      esac
     done
   fi
 }
