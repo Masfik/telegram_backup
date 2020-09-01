@@ -10,7 +10,8 @@ declare -r config_dir="$current_dir/caddy"
 # CONFIGURATION FILE
 #-------------------------------------------------------------------------------
 
-# shellcheck source=utils/generate_config.sh
+# utils/generate_config.sh
+# shellcheck disable=SC1090
 source "$3/generate_config.sh" --source-only
 
 declare -r config_file="$config_dir/caddy.config"
@@ -26,14 +27,15 @@ declare caddyfile_dir
 declare service_file
 declare file_name
 
-# shellcheck source=caddy/caddy.config
+# shellcheck disable=SC1090
 source "$config_file" --source-only
 
 #-------------------------------------------------------------------------------
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
 
-# shellcheck source=utils/file_encryption.sh
+# utils/file_encryption.sh
+# shellcheck disable=SC1090
 source "$3/file_encryption.sh" --source-only
 
 # Path of the checksum file
@@ -52,7 +54,8 @@ else
   # Saving the new checksum to the file
   echo "$new_checksum" >"$checksum_file"
 
-  # shellcheck source=../tg-backup.config
+  # ../tg-backup.config
+  # shellcheck disable=SC1090
   source "$5" --source only; declare -a gpg_recipients
 
   # Zipping the Caddyfile config

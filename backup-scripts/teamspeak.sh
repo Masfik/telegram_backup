@@ -10,7 +10,8 @@ declare -r config_dir="$current_dir/teamspeak"
 # CONFIGURATION FILE
 #-------------------------------------------------------------------------------
 
-# shellcheck source=utils/generate_config.sh
+# utils/generate_config.sh
+# shellcheck disable=SC1090
 source "$3/generate_config.sh" --source-only
 
 declare -r config_file="$config_dir/teamspeak.config"
@@ -25,14 +26,15 @@ declare teamspeak_dir
 declare service_file
 declare file_name
 
-# shellcheck source=teamspeak/teamspeak.config
+# shellcheck disable=SC1090
 source "$config_file" --source-only
 
 #-------------------------------------------------------------------------------
 # BACKING UP FILES
 #-------------------------------------------------------------------------------
 
-# shellcheck source=utils/file_encryption.sh
+# utils/file_encryption.sh
+# shellcheck disable=SC1090
 source "$3/file_encryption.sh" --source-only
 
 # Directory of the temporary files
@@ -43,7 +45,8 @@ declare -r db_backup_path="$tmp_dir/ts3server.sqlitedb"
 # Safely backing up the database via the special .backup function
 sqlite3 "$teamspeak_dir/ts3server.sqlitedb" ".backup '$db_backup_path'"
 
-# shellcheck source=../tg-backup.config
+# ../tg-backup.config
+# shellcheck disable=SC1090
 source "$5" --source only; declare -a gpg_recipients
 
 # Zipping database, icons, license, ts3server.ini, query whitelist and service
