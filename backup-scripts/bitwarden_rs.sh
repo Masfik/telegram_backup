@@ -1,6 +1,6 @@
 #!/bin/bash
 # Current directory of the script
-current_dir=$1
+declare -r current_dir=$1
 # Directory of the backup files
 declare -r backup_dir=$2
 # Directory of the config files
@@ -26,7 +26,7 @@ declare service_file
 declare file_name
 
 # shellcheck source=bitwarden/bitwarden.config
-source "$config_file"
+source "$config_file" --source-only
 
 #-------------------------------------------------------------------------------
 # BACKING UP FILES

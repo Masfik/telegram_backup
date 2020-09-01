@@ -21,7 +21,7 @@ generate_config -f "$config_file" -s file_name="iptables"
 declare file_name
 
 # shellcheck source=iptables/iptables.config
-source "$config_file"
+source "$config_file" --source-only
 
 #-------------------------------------------------------------------------------
 # BACKING UP FILES

@@ -26,7 +26,7 @@ declare service_file
 declare file_name
 
 # shellcheck source=teamspeak/teamspeak.config
-source "$config_file"
+source "$config_file" --source-only
 
 #-------------------------------------------------------------------------------
 # BACKING UP FILES
